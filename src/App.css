@@ -1,8 +1,8 @@
 #board {
   display: flex;
   flex-direction: column;
-  width: 25%;
-  height: 50%;
+  /* width: 25%;
+  height: 50%; */
   border: 3px solid black;
   justify-content: center;
   align-items: center;
@@ -16,4 +16,9 @@
   width: 100%;
   height: fit-content;
   margin: 5px;
+}
+
+#outerOuter {
+  display: flex;
+  flex-direction: row;
 }
