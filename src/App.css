@@ -1,12 +1,39 @@
+#leftColumn{
+  text-align: center;
+  justify-content: center;
+}
+h1 {
+  text-align: center;
+}
+
+#outerOuter {
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+  width: fit-content;
+  gap: 10px;
+  margin-left: 30px;
+}
+
+#buttonContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 59.5px;
+}
+
 #board {
   display: flex;
   flex-direction: column;
   /* width: 25%;
   height: 50%; */
-  border: 3px solid black;
+  /* border: 3px solid black; */
   justify-content: center;
   align-items: center;
-  margin: 30px;
+  margin-bottom: 10px;
+  text-align: center;
+  gap: 5px;
+  padding: 5px;
 }
 
 .rowContainer{
@@ -15,10 +42,42 @@
   justify-content: space-evenly;
   width: 100%;
   height: fit-content;
-  margin: 5px;
+  gap: 5px;
 }
 
-#outerOuter {
+#statsANDwindow {
   display: flex;
   flex-direction: row;
+  height: fit-content;
 }
+
+.orange {
+  background-color: orange;
+}
+.blue {
+  background-color: lightblue;
+}
+
+th, td {
+  border: 2px solid black;
+}
+#statsboard {
+  border-collapse: collapse;
+  table-layout: fixed;
+  width: 600px;
+}
+#statsboard thead {
+  height: 59.5px;
+}
+#statsboard thead th:nth-child(1) {
+  width: 25%;
+};
+#statsboard thead th:nth-child(2) {
+  width: 25%;
+};
+#statsboard thead th:nth-child(3) {
+  width: 25%;
+};
+#statsboard thead th:nth-child(4) {
+  width: 25%;
+};

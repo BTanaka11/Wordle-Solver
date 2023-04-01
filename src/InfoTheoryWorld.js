@@ -1,4 +1,4 @@
-import {words, getColors} from './helperFunctions.js';
+import {getColors} from './helperFunctions.js';
 
 let InfoTheoryWorld = function(words) {
   this.wordSpace = words;
@@ -7,7 +7,6 @@ let InfoTheoryWorld = function(words) {
 InfoTheoryWorld.prototype.checkGuess = function(guess) {
   let distribution = {};
   let count = this.wordSpace.length;
-  console.log(count)
   for (let i = 0; i < this.wordSpace.length; i ++) {
     let tempRes = getColors(this.wordSpace[i], guess).join('');
     distribution[tempRes] = 1 + (distribution[tempRes] || 0);
@@ -18,25 +17,22 @@ InfoTheoryWorld.prototype.checkGuess = function(guess) {
       let p = val / count;
       let i = Math.log2(1/p);
       entropy += p * i;
-  })
+  });
+
   return entropy;
 }
 
-InfoTheoryWorld.prototype.getBestGuess = function() {
-  let max = [-Infinity, ''];
-  this.wordSpace.forEach((word)=> {
-    let res = this.checkGuess(word);
-    if (res > max[0]) {
-      max[0] = res;
-      max[1] = word;
-    }
-  })
-  return max;
-}
-
-InfoTheoryWorld.prototype.reset = function () {
-  this.wordSpace = words;
-}
+// InfoTheoryWorld.prototype.getBestGuess = function() {
+//   let max = [-Infinity, ''];
+//   this.wordSpace.forEach((word)=> {
+//     let res = this.checkGuess(word);
+//     if (res > max[0]) {
+//       max[0] = res;
+//       max[1] = word;
+//     }
+//   })
+//   return max;
+// }
 
 InfoTheoryWorld.prototype.trimWordSpace = function (colors, guess) {
   //g = lightgreen > letter in right place
@@ -92,10 +88,8 @@ InfoTheoryWorld.prototype.trimWordSpace = function (colors, guess) {
       if (Object.keys(clonedYellowObj).length !== 0) {
         including = false;
       }
-      if (this.wordSpace[i] === 'peeps') {
-        console.log('greyed', yellowsObj, clonedYellowObj)
-      }
     }
+
     if (including) {
       //exclude greys
       for (let j = 0; j < remainingIndexes.length; j ++) {
@@ -116,11 +110,4 @@ InfoTheoryWorld.prototype.trimWordSpace = function (colors, guess) {
   this.wordSpace = this.wordSpace.filter((item)=>(item !== null));
 }
 
-// module.exports = {
-//   InfoTheoryWorld: InfoTheoryWorld,
-//   infoTheoryDataStructure: () => (new InfoTheoryWorld(words))
-// }
-
-export const infoTheoryDataStructure = () => {
-  return new InfoTheoryWorld(words);
-}
+export default InfoTheoryWorld;
