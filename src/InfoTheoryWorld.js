@@ -33,8 +33,46 @@ InfoTheoryWorld.prototype.checkGuess = function(guess) {
 //   })
 //   return max;
 // }
-
 InfoTheoryWorld.prototype.trimWordSpace = function (colors, guess) {
+  let yellowsOBJ = {};
+  let greysOBJ = {};
+  let yellowCount = 0;
+  for (let i = 0; i < guess.length; i ++) {
+    if (colors[i] === 'y') {
+      yellowsOBJ[guess[i]] = 1 + (yellowsOBJ[guess[i]] || 0);
+      yellowCount ++;
+    } else if (colors[i] === 'l') {
+      greysOBJ[guess[i]] = true;
+    }
+  }
+  for (let i = 0; i < this.wordSpace.length; i ++) {
+    let clonedYellow = {...yellowsOBJ};
+    let include = true;
+    let j = 0;
+    let yellowTempCount = 0;
+    while (j <= guess.length && include) {
+      if (colors[j] === 'g') {
+        if (this.wordSpace[i][j] !== guess[j]) {
+          include = false;
+        }
+      } else if (colors[j] === 'y' && this.wordSpace[i][j] === guess[j]) {
+        include = false;
+      } else if (clonedYellow[this.wordSpace[i][j]] > 0) {
+        clonedYellow[this.wordSpace[i][j]] --;
+        yellowTempCount ++;
+      } else if (greysOBJ[this.wordSpace[i][j]]) {
+        include = false;
+      }
+      j++;
+    }
+    if (include === false || yellowTempCount !== yellowCount) {
+      this.wordSpace[i] = null;
+    }
+  }
+  this.wordSpace = this.wordSpace.filter((item)=>(item !== null));
+}
+
+InfoTheoryWorld.prototype.trimWordSpaceOLD = function (colors, guess) {
   //g = lightgreen > letter in right place
   //l = lightgrey > not in the answer
   //y= yellow > in the answer but diff spot
@@ -111,3 +149,4 @@ InfoTheoryWorld.prototype.trimWordSpace = function (colors, guess) {
 }
 
 export default InfoTheoryWorld;
+// module.exports.InfoTheoryWorld = InfoTheoryWorld;

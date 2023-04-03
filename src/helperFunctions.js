@@ -39,9 +39,3 @@ export const getColors = (word, guess) => {
 
   return result;
 }
-
-// module.exports = {
-//   words: words,
-//   getRandomWord: getRandomWord,
-//   getColors: getColors
-// }
