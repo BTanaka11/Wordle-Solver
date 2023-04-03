@@ -81,3 +81,11 @@ th, td {
 #statsboard thead th:nth-child(4) {
   width: 25%;
 };
+
+#topxTable {
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+caption {
+  caption-side: bottom;
+}

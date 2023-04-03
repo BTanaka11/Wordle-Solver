@@ -19,7 +19,7 @@ InfoTheoryWorld.prototype.checkGuess = function(guess) {
       entropy += p * i;
   });
 
-  return entropy;
+  return entropy.toFixed(2);
 }
 
 // InfoTheoryWorld.prototype.getBestGuess = function() {

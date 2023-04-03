@@ -48,7 +48,7 @@ function App() {
     if (botActive && mode === 'gaming') {
       interval = setInterval(()=> {
         setBotWindow(a=>a + 1);
-      }, 7000);
+      }, 20000);
     } else {
       clearInterval(interval);
     }
@@ -64,7 +64,6 @@ function App() {
 
     //right here is where, if AI is playing, it should get optimal guess and display visuals and return GUESS for use in line below.
     let colors = getColors(word, guess);
-
     let stats = {
       wordCountBefore: infoTheoryDataStructure.wordSpace.length,
       entropy: infoTheoryDataStructure.checkGuess(guess)
@@ -110,7 +109,7 @@ function App() {
         {/* <span>Answer: {word}</span> */}
       </div>
 
-      <div id="statsANDwindow" className={classLabelForColoring()}>
+      <div id="statsANDwindow" >
         <table id="statsboard">
           <thead>
             <tr>
@@ -126,8 +125,8 @@ function App() {
             ))}
           </tbody>
         </table>
-        {botActive && <SolverInAction setGuess={setGuess} botWindow={botWindow} addGuessColorsAndSetGuesses={addGuessColorsAndSetGuesses} infoTheoryDataStructure={infoTheoryDataStructure} className='orange'></SolverInAction>}
       </div>
+      {botActive && <SolverInAction setGuess={setGuess} botWindow={botWindow} addGuessColorsAndSetGuesses={addGuessColorsAndSetGuesses} infoTheoryDataStructure={infoTheoryDataStructure} topX={10} timeEach={Math.floor(6000 / infoTheoryDataStructure.wordSpace.length)}></SolverInAction>}
     </div>
   );
 }
