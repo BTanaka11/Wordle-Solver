@@ -1,10 +1,12 @@
 import React from 'react';
 import {infoTheoryDataStructure} from './App.js';
 
-export const SolverInAction = ({botWindow, addGuessColorsAndSetGuesses, topX, timeEach}) => {
+export const SolverInAction = ({addGuessColorsAndSetGuesses, topX}) => {
 
   const [top5Array, setTop5Array] = React.useState(new Array(topX).fill(null).map(()=>(['',''])));
   const [currentWordIndex, setCurrentWordIndex] = React.useState(0);
+
+  let timeEach = Math.min(Math.floor(6000 / infoTheoryDataStructure.wordSpace.length), 500);
 
   React.useEffect(()=> {
     let timerz;
@@ -34,7 +36,7 @@ export const SolverInAction = ({botWindow, addGuessColorsAndSetGuesses, topX, ti
   return (
     <div >
 
-      <table key={botWindow} id="topxTable" className='orange'>
+      <table id="topxTable" className='orange'>
         <caption style={{"captionSide":"bottom"}}>{infoTheoryDataStructure.wordSpace[currentWordIndex]}</caption>
         <thead>
           <tr>

@@ -21,10 +21,10 @@ function App() {
   const [mode, setMode] = React.useState(null);
   const [guess, setGuess] = React.useState(null);
   const [botSpeed, setBotSpeed] = React.useState(null);
-  const [botWindow, setBotWindow] = React.useState(null);
   const [botScoreSum, setBotScoreSum] = React.useState(0);
   const [botGameCount, setbotGameCount] = React.useState(0);
   const [humanMove, setHumanMove] = React.useState(false);
+  const [displaySolver, setdisplaySolver] = React.useState(false);
 
   const resetGame = () => {
     fetch(wordList)
@@ -57,13 +57,10 @@ function App() {
       }
       setTimeout(resetGame, 2000);
     };
-
-    let temp = [...guesses];
-    let tempBotActive = false;
-    if (botSpeed === 1) {
-      setBotWindow(0);
-      tempBotActive = true;
+    if (displaySolver) {
+      setdisplaySolver(false);
     }
+    let temp = [...guesses];
 
     //right here is where, if AI is playing, it should get optimal guess and display visuals and return GUESS for use in line below.
     let colors = getColors(word, guess1);
@@ -86,25 +83,27 @@ function App() {
       setCurrentRow(a=>a+1);
       setGuess('');
     }
-    if (tempBotActive) {
-      setTimeout(()=> {
-        setBotWindow(a=>a+1);
-      }, 2500);
-    }
-  }, [botSpeed, currentRow, guesses, word, humanMove])
+
+  }, [botSpeed, currentRow, guesses, word, humanMove, displaySolver])
 
   React.useEffect(()=> {
     resetGame();
   }, []);
 
   React.useEffect(()=> {
+    let interval0;
     let interval1;
     let interval2;
     if (botSpeed === 1) {
-      setBotWindow(a=>a+1)
+      interval0 = setInterval(()=> {
+        setdisplaySolver(true);
+      }, 4000);
+
     } else {
-      setBotWindow(0)
+      setdisplaySolver(false);
+      clearInterval(interval0);
     }
+
     if (botSpeed === 2) {
       interval1 = setInterval(()=> {
         addGuessColorsAndSetGuesses(infoTheoryDataStructure.getBestGuess())
@@ -140,7 +139,7 @@ function App() {
       clearInterval(interval2);
     }
 
-    return ()=>{clearInterval(interval1); clearInterval(interval2)};
+    return ()=>{clearInterval(interval1); clearInterval(interval2); clearInterval(interval0)};
   }, [botSpeed, addGuessColorsAndSetGuesses, lengthz]);
 
   if (!guesses) {
@@ -191,7 +190,7 @@ function App() {
           </tbody>
         </table>
       </div>
-      {botWindow > 0 && <SolverInAction botWindow={botWindow} addGuessColorsAndSetGuesses={addGuessColorsAndSetGuesses} infoTheoryDataStructure={infoTheoryDataStructure} topX={10} timeEach={Math.min(Math.floor(6000 / infoTheoryDataStructure.wordSpace.length), 500)}></SolverInAction>}
+      {displaySolver && <SolverInAction addGuessColorsAndSetGuesses={addGuessColorsAndSetGuesses} topX={10}></SolverInAction>}
 
     </div>
   );

@@ -48,6 +48,7 @@ InfoTheoryWorld.prototype.trimWordSpace = function (colors, guess) {
   let yellowsOBJ = {};
   let greysOBJ = {};
   let yellowCount = 0;
+  let results = [];
   for (let i = 0; i < guess.length; i ++) {
     if (colors[i] === 'y') {
       yellowsOBJ[guess[i]] = 1 + (yellowsOBJ[guess[i]] || 0);
@@ -76,11 +77,15 @@ InfoTheoryWorld.prototype.trimWordSpace = function (colors, guess) {
       }
       j++;
     }
-    if (include === false || yellowTempCount !== yellowCount) {
-      this.wordSpace[i] = null;
+    // if (include === false || yellowTempCount !== yellowCount) {
+    //   this.wordSpace[i] = null;
+    // }
+    if (include === true && yellowTempCount === yellowCount) {
+      results.push(this.wordSpace[i])
     }
   }
-  this.wordSpace = this.wordSpace.filter((item)=>(item !== null));
+  this.wordSpace = results;
+  // this.wordSpace = this.wordSpace.filter((item)=>(item !== null));
 }
 
 InfoTheoryWorld.prototype.trimWordSpaceOLD = function (colors, guess) {
