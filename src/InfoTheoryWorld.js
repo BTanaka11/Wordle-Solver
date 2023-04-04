@@ -2,6 +2,8 @@ import {getColors} from './helperFunctions.js';
 
 let InfoTheoryWorld = function(words) {
   this.wordSpace = words;
+  this.originalWordSpaceLength = words.length;
+  this.bestFirstGuess = null;
 }
 
 InfoTheoryWorld.prototype.checkGuess = function(guess) {
@@ -22,17 +24,24 @@ InfoTheoryWorld.prototype.checkGuess = function(guess) {
   return entropy.toFixed(2);
 }
 
-// InfoTheoryWorld.prototype.getBestGuess = function() {
-//   let max = [-Infinity, ''];
-//   this.wordSpace.forEach((word)=> {
-//     let res = this.checkGuess(word);
-//     if (res > max[0]) {
-//       max[0] = res;
-//       max[1] = word;
-//     }
-//   })
-//   return max;
-// }
+InfoTheoryWorld.prototype.getBestGuess = function() {
+  if (this.originalWordSpaceLength === this.wordSpace.length && this.bestFirstGuess) {
+    return this.bestFirstGuess;
+  }
+
+  let max = [-Infinity, ''];
+  this.wordSpace.forEach((word)=> {
+    let res = this.checkGuess(word);
+    if (res > max[0]) {
+      max[0] = res;
+      max[1] = word;
+    }
+  })
+  if (this.originalWordSpaceLength === this.wordSpace.length) {
+    this.bestFirstGuess = max[1];
+  }
+  return max[1];
+}
 InfoTheoryWorld.prototype.trimWordSpace = function (colors, guess) {
   let yellowsOBJ = {};
   let greysOBJ = {};

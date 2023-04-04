@@ -61,9 +61,11 @@ h1 {
 th, td {
   border: 2px solid black;
 }
-#statsboard {
+table {
   border-collapse: collapse;
   table-layout: fixed;
+}
+#statsboard {
   width: 600px;
 }
 #statsboard thead {
@@ -82,10 +84,6 @@ th, td {
   width: 25%;
 };
 
-#topxTable {
-  border-collapse: collapse;
-  table-layout: fixed;
-}
 caption {
   caption-side: bottom;
 }
