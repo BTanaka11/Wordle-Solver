@@ -1,13 +1,14 @@
 import React from 'react';
+import {infoTheoryDataStructure} from './App.js';
 
-export const SolverInAction = ({setGuess, botWindow, addGuessColorsAndSetGuesses, infoTheoryDataStructure, topX, timeEach}) => {
+export const SolverInAction = ({botWindow, addGuessColorsAndSetGuesses, topX, timeEach}) => {
 
   const [top5Array, setTop5Array] = React.useState(new Array(topX).fill(null).map(()=>(['',''])));
   const [currentWordIndex, setCurrentWordIndex] = React.useState(0);
 
   React.useEffect(()=> {
     let timerz;
-    if (currentWordIndex < infoTheoryDataStructure.wordSpace.length - 1) {
+    if (currentWordIndex <= infoTheoryDataStructure.wordSpace.length - 1) {
       timerz = setTimeout(()=> {
         let word = infoTheoryDataStructure.wordSpace[currentWordIndex];
         let score = infoTheoryDataStructure.checkGuess(word);
@@ -24,12 +25,11 @@ export const SolverInAction = ({setGuess, botWindow, addGuessColorsAndSetGuesses
         setCurrentWordIndex(a=>a+1);
         }, timeEach);
     } else {
-      setGuess(top5Array[0][0]);
-      addGuessColorsAndSetGuesses();
+      addGuessColorsAndSetGuesses(top5Array[0][0]);
       clearTimeout(timerz);
     }
     return () => clearTimeout(timerz);
-  }, [top5Array, currentWordIndex, infoTheoryDataStructure, topX, timeEach, setGuess, addGuessColorsAndSetGuesses]);
+  }, [top5Array, currentWordIndex, topX, timeEach, addGuessColorsAndSetGuesses]);
 
   return (
     <div >

@@ -8,7 +8,7 @@ import InfoTheoryWorld from './InfoTheoryWorld.js';
 import {SolverInAction} from './SolverInAction.js';
 
 // let infoTheoryData = infoTheoryDataStructure();
-let infoTheoryDataStructure;
+export let infoTheoryDataStructure;
 
 function App() {
 
@@ -43,43 +43,53 @@ function App() {
     resetGame();
   }, []);
 
-  React.useEffect(()=> {
-    let interval = null;
-    if (botActive && mode === 'gaming') {
-      interval = setInterval(()=> {
-        setBotWindow(a=>a + 1);
-      }, 20000);
-    } else {
-      clearInterval(interval);
-    }
-    return () => clearInterval(interval)
-  }, [botActive, mode, botWindow]);
+  // React.useEffect(()=> {
+  //   let timerz = null;
+  //   if (botActive && mode === 'gaming') {
+  //     timerz = setTimeout(()=> {
+  //       setBotWindow(a=>a + 1);
+  //     }, 8000);
+  //   } else {
+  //     clearTimeout(timerz);
+  //   }
+  //   return () => clearTimeout(timerz)
+  // }, [botActive, mode]);
 
   if (!guesses) {
     return <div>loading...</div>
   }
 
-  const addGuessColorsAndSetGuesses = () => {
+  const addGuessColorsAndSetGuesses = (guess1) => {
     let temp = [...guesses];
-
+    let tempBotActive = false;
+    if (botWindow > 0) {
+      setBotWindow(0);
+      tempBotActive = true;
+    }
+    // setBotWindow(0);
     //right here is where, if AI is playing, it should get optimal guess and display visuals and return GUESS for use in line below.
-    let colors = getColors(word, guess);
+    let colors = getColors(word, guess1);
     let stats = {
       wordCountBefore: infoTheoryDataStructure.wordSpace.length,
-      entropy: infoTheoryDataStructure.checkGuess(guess)
+      entropy: infoTheoryDataStructure.checkGuess(guess1)
     };
-    infoTheoryDataStructure.trimWordSpace(colors, guess);
+    infoTheoryDataStructure.trimWordSpace(colors, guess1);
     stats.wordCountAfter = infoTheoryDataStructure.wordSpace.length;
 
-    temp[currentRow] = {guessWord: guess, guessColors: colors, guessStats: stats};
+    temp[currentRow] = {guessWord: guess1, guessColors: colors, guessStats: stats};
     setGuesses(temp);
-    if (guess === word) {
+    if (guess1 === word) {
       setMode('won');
     } else if (currentRow === 5) {
       setMode('lost');
     } else {
       setCurrentRow(a=>a+1);
       setGuess('');
+      if (tempBotActive) {
+        setTimeout(()=> {
+          setBotWindow(a=>a+1);
+        }, 5000);
+      }
     }
   }
 
@@ -89,7 +99,7 @@ function App() {
     <div id ="outerOuter">
       <div id="leftColumn">
         <div id="buttonContainer">
-          <button className={classLabelForColoring()} onClick={()=>(setBotActive(a=>!a))}>Turn {botActive ? 'Off': 'On'} Bot</button>
+          <button className={classLabelForColoring()} onClick={()=>(setBotWindow(botWindow === 0? 1 : 0))}>Turn {botWindow > 0 ? 'Off': 'On'} Bot</button>
         </div>
         <div id="board">
           {guesses.map((item, index)=> (
@@ -98,7 +108,7 @@ function App() {
         </div>
         {mode === 'gaming' && <div>
         <input type="text" maxLength={lengthz} placeholder="enter guess" onChange={((e)=>{setGuess(e.target.value)})} value={guess}></input>
-        <input type="submit" disabled={guess.length < lengthz} onClick={addGuessColorsAndSetGuesses}></input>
+        <input type="submit" disabled={guess.length < lengthz} onClick={()=>addGuessColorsAndSetGuesses(guess)}></input>
         </div>}
         {mode==='won' && <div>Won in {currentRow + 1} tries!
           <button onClick={resetGame}>Play Again</button>
@@ -126,7 +136,7 @@ function App() {
           </tbody>
         </table>
       </div>
-      {botActive && <SolverInAction setGuess={setGuess} botWindow={botWindow} addGuessColorsAndSetGuesses={addGuessColorsAndSetGuesses} infoTheoryDataStructure={infoTheoryDataStructure} topX={10} timeEach={Math.floor(6000 / infoTheoryDataStructure.wordSpace.length)}></SolverInAction>}
+      {botWindow > 0 && <SolverInAction botWindow={botWindow} addGuessColorsAndSetGuesses={addGuessColorsAndSetGuesses} infoTheoryDataStructure={infoTheoryDataStructure} topX={10} timeEach={Math.floor(6000 / infoTheoryDataStructure.wordSpace.length)}></SolverInAction>}
     </div>
   );
 }
