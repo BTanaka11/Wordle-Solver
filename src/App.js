@@ -43,17 +43,13 @@ function App() {
     resetGame();
   }, []);
 
-  // React.useEffect(()=> {
-  //   let timerz = null;
-  //   if (botActive && mode === 'gaming') {
-  //     timerz = setTimeout(()=> {
-  //       setBotWindow(a=>a + 1);
-  //     }, 8000);
-  //   } else {
-  //     clearTimeout(timerz);
-  //   }
-  //   return () => clearTimeout(timerz)
-  // }, [botActive, mode]);
+  React.useEffect(()=> {
+    if (botActive) {
+      setBotWindow(a=>a+1)
+    } else {
+      setBotWindow(0)
+    }
+  }, [botActive]);
 
   if (!guesses) {
     return <div>loading...</div>
@@ -62,11 +58,11 @@ function App() {
   const addGuessColorsAndSetGuesses = (guess1) => {
     let temp = [...guesses];
     let tempBotActive = false;
-    if (botWindow > 0) {
+    if (botActive) {
       setBotWindow(0);
       tempBotActive = true;
     }
-    // setBotWindow(0);
+
     //right here is where, if AI is playing, it should get optimal guess and display visuals and return GUESS for use in line below.
     let colors = getColors(word, guess1);
     let stats = {
@@ -76,7 +72,7 @@ function App() {
     infoTheoryDataStructure.trimWordSpace(colors, guess1);
     stats.wordCountAfter = infoTheoryDataStructure.wordSpace.length;
 
-    temp[currentRow] = {guessWord: guess1, guessColors: colors, guessStats: stats};
+    temp[currentRow] = {guessWord: guess1, guessColors: colors, guessStats: stats, bot:botActive? true: false};
     setGuesses(temp);
     if (guess1 === word) {
       setMode('won');
@@ -88,7 +84,7 @@ function App() {
       if (tempBotActive) {
         setTimeout(()=> {
           setBotWindow(a=>a+1);
-        }, 5000);
+        }, 2500);
       }
     }
   }
@@ -99,11 +95,11 @@ function App() {
     <div id ="outerOuter">
       <div id="leftColumn">
         <div id="buttonContainer">
-          <button className={classLabelForColoring()} onClick={()=>(setBotWindow(botWindow === 0? 1 : 0))}>Turn {botWindow > 0 ? 'Off': 'On'} Bot</button>
+          {mode === 'gaming' && <button className={classLabelForColoring()} onClick={()=>{setBotActive(a=>!a)}}>Turn {botActive ? 'Off': 'On'} Bot</button>}
         </div>
         <div id="board">
           {guesses.map((item, index)=> (
-            <Row key={index} word={word} guess={guesses[index]}></Row>
+            <Row key={index} word={word} guess={item}></Row>
           ))}
         </div>
         {mode === 'gaming' && <div>
@@ -131,12 +127,13 @@ function App() {
           </thead>
           <tbody>
             {guesses.filter((item)=>(item.guessStats !== null)).map((item, index)=> (
-              <RowStat guessStats={item.guessStats} key={index} className={classLabelForColoring()}></RowStat>
+              <RowStat guessStats={item.guessStats} key={index} bot={item.bot}></RowStat>
             ))}
           </tbody>
         </table>
       </div>
-      {botWindow > 0 && <SolverInAction botWindow={botWindow} addGuessColorsAndSetGuesses={addGuessColorsAndSetGuesses} infoTheoryDataStructure={infoTheoryDataStructure} topX={10} timeEach={Math.floor(6000 / infoTheoryDataStructure.wordSpace.length)}></SolverInAction>}
+      {botWindow > 0 && <SolverInAction botWindow={botWindow} addGuessColorsAndSetGuesses={addGuessColorsAndSetGuesses} infoTheoryDataStructure={infoTheoryDataStructure} topX={10} timeEach={Math.min(Math.floor(6000 / infoTheoryDataStructure.wordSpace.length), 500)}></SolverInAction>}
+
     </div>
   );
 }
