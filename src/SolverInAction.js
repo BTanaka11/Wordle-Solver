@@ -35,7 +35,7 @@ export const SolverInAction = ({botWindow, addGuessColorsAndSetGuesses, topX, ti
     <div >
 
       <table key={botWindow} id="topxTable" className='orange'>
-        <caption>{infoTheoryDataStructure.wordSpace[currentWordIndex]}</caption>
+        <caption style={{"captionSide":"bottom"}}>{infoTheoryDataStructure.wordSpace[currentWordIndex]}</caption>
         <thead>
           <tr>
             <th>Top {topX} Words</th>

@@ -83,7 +83,3 @@ table {
 #statsboard thead th:nth-child(4) {
   width: 25%;
 };
-
-caption {
-  caption-side: bottom;
-}

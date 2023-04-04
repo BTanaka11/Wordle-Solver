@@ -56,6 +56,7 @@ function App() {
       if (!humanMove) {
         setBotScoreSum(a=>a+currentRow+1);
         setbotGameCount(a=>a+1);
+        setHumanMove(true);
       }
       setTimeout(resetGame, 2000);
     };
