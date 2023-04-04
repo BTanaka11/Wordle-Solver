@@ -12,6 +12,7 @@ export const getRandomWord = () => {
 }
 
 export const getColors = (word, guess) => {
+
   let objLetters = {};
   let result = new Array(word.length);
 

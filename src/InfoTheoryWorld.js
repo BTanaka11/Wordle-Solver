@@ -2,8 +2,10 @@ import {getColors} from './helperFunctions.js';
 
 let InfoTheoryWorld = function(words) {
   this.wordSpace = words;
+  this.orgiginalWordSpace = [...words];
   this.originalWordSpaceLength = words.length;
   this.bestFirstGuess = null;
+  this.index = 0;
 }
 
 InfoTheoryWorld.prototype.checkGuess = function(guess) {
