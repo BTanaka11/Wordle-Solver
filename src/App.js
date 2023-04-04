@@ -27,7 +27,6 @@ function App() {
   const [humanMove, setHumanMove] = React.useState(false);
 
   const resetGame = () => {
-    console.log('reset!')
     fetch(wordList)
     .then(response => response.text())
     .then(text=> text.split(/\r?\t|\n/))
@@ -46,8 +45,6 @@ function App() {
       } else {
         infoTheoryDataStructure.wordSpace = res;
       }
-      // setBotSpeed(0);
-      // setBotWindow(0);
     })
   }
 
@@ -116,16 +113,16 @@ function App() {
       clearInterval(interval1);
     }
     if (botSpeed === 3) {
-
       interval2 = setInterval(()=> {
-        // resetGame();
+        resetGame();
         infoTheoryDataStructure.wordSpace = [...infoTheoryDataStructure.orgiginalWordSpace];
         let bestGuess = infoTheoryDataStructure.getBestGuess();
         let indexed = infoTheoryDataStructure.index;
         let actualWord = infoTheoryDataStructure.wordSpace[indexed];
         let colorz = getColors(actualWord, bestGuess).join('');
         let roundCount = 1;
-        while (roundCount < 6 && colorz !== 'ggggg') {
+        let allGreens = 'g'.repeat(lengthz)
+        while (roundCount < 6 && colorz !== allGreens) {
           infoTheoryDataStructure.trimWordSpace(colorz, bestGuess);
           bestGuess = infoTheoryDataStructure.getBestGuess();
           colorz = getColors(actualWord, bestGuess).join('');
@@ -137,15 +134,14 @@ function App() {
           setBotSpeed(0);
         } else {
           infoTheoryDataStructure.index = indexed + 1;
-          // setBotSpeed(0);
         };
-      }, 30);
+      }, 50);
     } else {
       clearInterval(interval2);
     }
 
     return ()=>{clearInterval(interval1); clearInterval(interval2)};
-  }, [botSpeed, addGuessColorsAndSetGuesses]);
+  }, [botSpeed, addGuessColorsAndSetGuesses, lengthz]);
 
   if (!guesses) {
     return <div>loading...</div>
