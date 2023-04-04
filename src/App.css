@@ -9,6 +9,7 @@ h1 {
 #outerOuter {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   text-align: center;
   width: fit-content;
   gap: 10px;

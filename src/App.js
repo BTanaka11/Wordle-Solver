@@ -139,7 +139,7 @@ function App() {
           infoTheoryDataStructure.index = indexed + 1;
           // setBotSpeed(0);
         };
-      }, 2000);
+      }, 30);
     } else {
       clearInterval(interval2);
     }
