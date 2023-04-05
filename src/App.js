@@ -9,7 +9,6 @@ import {SolverInAction} from './SolverInAction.js';
 import {BotAverage} from './BotAverage.js';
 import {BotSpeedSetting} from './BotSpeedSetting.js';
 
-// let infoTheoryData = infoTheoryDataStructure();
 export let infoTheoryDataStructure;
 
 function App() {
