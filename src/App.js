@@ -55,7 +55,9 @@ function App() {
         setbotGameCount(a=>a+1);
         setHumanMove(true);
       }
-      setTimeout(resetGame, 2000);
+      if (guesses[currentRow].bot) {
+        setTimeout(resetGame, 2000);
+      }
     };
     if (displaySolver) {
       setdisplaySolver(false);
@@ -91,28 +93,28 @@ function App() {
   }, []);
 
   React.useEffect(()=> {
-    let interval0;
     let interval1;
     let interval2;
+    let interval3;
     if (botSpeed === 1) {
-      interval0 = setInterval(()=> {
+      interval1 = setInterval(()=> {
         setdisplaySolver(true);
       }, 4000);
 
     } else {
       setdisplaySolver(false);
-      clearInterval(interval0);
+      clearInterval(interval1);
     }
 
     if (botSpeed === 2) {
-      interval1 = setInterval(()=> {
+      interval2 = setInterval(()=> {
         addGuessColorsAndSetGuesses(infoTheoryDataStructure.getBestGuess())
       }, 2500);
     } else {
-      clearInterval(interval1);
+      clearInterval(interval2);
     }
     if (botSpeed === 3) {
-      interval2 = setInterval(()=> {
+      interval3 = setInterval(()=> {
         resetGame();
         infoTheoryDataStructure.wordSpace = [...infoTheoryDataStructure.orgiginalWordSpace];
         let bestGuess = infoTheoryDataStructure.getBestGuess();
@@ -136,10 +138,10 @@ function App() {
         };
       }, 50);
     } else {
-      clearInterval(interval2);
+      clearInterval(interval3);
     }
 
-    return ()=>{clearInterval(interval1); clearInterval(interval2); clearInterval(interval0)};
+    return ()=>{clearInterval(interval2); clearInterval(interval3); clearInterval(interval1)};
   }, [botSpeed, addGuessColorsAndSetGuesses, lengthz]);
 
   if (!guesses) {
@@ -150,7 +152,7 @@ function App() {
     <div id ="outerOuter">
       <div id="leftColumn">
         <div id="buttonContainer">
-          <BotSpeedSetting setBotSpeed={setBotSpeed}></BotSpeedSetting>
+          <BotSpeedSetting setBotSpeed={setBotSpeed} mode={mode}></BotSpeedSetting>
           <BotAverage count={botGameCount} average={(botScoreSum/botGameCount).toFixed(2)}></BotAverage>
         </div>
         <div id="board">
@@ -158,19 +160,18 @@ function App() {
             <Row key={index} word={word} guess={item}></Row>
           ))}
         </div>
-        {mode === 'gaming' && <div>
-        <input type="text" maxLength={lengthz} placeholder="enter guess" onChange={((e)=>{setGuess(e.target.value)})} value={guess}></input>
-        <input type="submit" disabled={guess.length < lengthz} onClick={()=>{
+        {mode === 'gaming' && !botSpeed && <div>
+        <input className="inputPart" type="text" maxLength={lengthz} placeholder="enter guess" onChange={((e)=>{setGuess(e.target.value)})} value={guess}></input>
+        <input className="inputPart" type="submit" disabled={guess.length < lengthz} onClick={()=>{
           setHumanMove(true);
           addGuessColorsAndSetGuesses(guess);
           }}></input>
         </div>}
-        {mode==='won' && <div>Won in {currentRow + 1} tries!
-          <button onClick={resetGame}>Play Again</button>
+
+        {mode!=='gaming' && <div>{mode === 'won' ? `Won in ${currentRow + 1} tries!` : `Lost! The answer was ${word}.`}
+          {!botSpeed && <button onClick={resetGame}>Play Again</button>}
         </div>}
-        {mode==='lost' && <div>Lost! The answer was {word}
-          <button onClick={resetGame}>Play Again</button>
-        </div>}
+
       </div>
 
       <div id="statsANDwindow" >
