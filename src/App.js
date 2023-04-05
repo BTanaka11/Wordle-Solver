@@ -133,10 +133,11 @@ function App() {
         setbotGameCount(a=>a+1);
         if (indexed === infoTheoryDataStructure.originalWordSpaceLength -1) {
           setBotSpeed(0);
+          resetGame();
         } else {
           infoTheoryDataStructure.index = indexed + 1;
         };
-      }, 50);
+      }, 10);
     } else {
       clearInterval(interval3);
     }

@@ -77,15 +77,11 @@ InfoTheoryWorld.prototype.trimWordSpace = function (colors, guess) {
       }
       j++;
     }
-    // if (include === false || yellowTempCount !== yellowCount) {
-    //   this.wordSpace[i] = null;
-    // }
     if (include === true && yellowTempCount === yellowCount) {
       results.push(this.wordSpace[i])
     }
   }
   this.wordSpace = results;
-  // this.wordSpace = this.wordSpace.filter((item)=>(item !== null));
 }
 
 InfoTheoryWorld.prototype.trimWordSpaceOLD = function (colors, guess) {
