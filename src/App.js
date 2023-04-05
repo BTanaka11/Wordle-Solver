@@ -161,10 +161,15 @@ function App() {
           ))}
         </div>
         {mode === 'gaming' && !botSpeed && <div>
-        <input className="inputPart" type="text" maxLength={lengthz} placeholder="enter guess" onChange={((e)=>{setGuess(e.target.value)})} value={guess}></input>
+        <input className="inputPart" type="text" maxLength={lengthz} placeholder="enter guess..." onChange={((e)=>{setGuess(e.target.value.toLowerCase())})} value={guess}></input>
         <input className="inputPart" type="submit" disabled={guess.length < lengthz} onClick={()=>{
-          setHumanMove(true);
-          addGuessColorsAndSetGuesses(guess);
+          if (infoTheoryDataStructure.validateGuess(guess)) {
+            setHumanMove(true);
+            addGuessColorsAndSetGuesses(guess);
+          } else {
+            alert('Invalid word!');
+          }
+
           }}></input>
         </div>}
 

@@ -84,81 +84,8 @@ InfoTheoryWorld.prototype.trimWordSpace = function (colors, guess) {
   this.wordSpace = results;
 }
 
-InfoTheoryWorld.prototype.trimWordSpaceOLD = function (colors, guess) {
-  //g = lightgreen > letter in right place
-  //l = lightgrey > not in the answer
-  //y= yellow > in the answer but diff spot
-  let greens = [];
-  let remainingIndexes = [];
-  let yellowsObj = {};
-  let greysObj = {};
-  let including = true;
-
-  for (let i = 0; i < guess.length; i ++) {
-    if (colors[i] === 'g') {
-      greens.push(i);
-    } else if (colors[i] === 'l') {
-      greysObj[guess[i]] = 1;
-      remainingIndexes.push(i)
-    } else if (colors[i] === 'y') {
-      yellowsObj[guess[i]] = 1 + (yellowsObj[guess[i]] | 0);
-      remainingIndexes.push(i)
-    }
-  }
-
-  for (let i = 0; i < this.wordSpace.length; i ++) {
-    //exclude greens
-
-    if (greens.some((k)=>(this.wordSpace[i][k] !== guess[k]))) {
-      including = false;
-    }
-
-    let greysToExclude;
-    if (including) {
-      //exclude yellows
-      let clonedYellowObj = {...yellowsObj};
-      greysToExclude = new Array(colors.length).fill(false);
-      for (let j = 0; j < remainingIndexes.length; j ++) {
-        let index = remainingIndexes[j];
-        let tempz = clonedYellowObj[this.wordSpace[i][index]];
-        if (tempz !== undefined) {
-          if (this.wordSpace[i][index] === guess[index]) {
-            including = false;
-            break;
-          }
-          greysToExclude[index] = true;
-          if (tempz === 1) {
-            delete clonedYellowObj[this.wordSpace[i][index]];
-          } else if (tempz > 1) {
-            clonedYellowObj[this.wordSpace[i][index]] --;
-          }
-        }
-      }
-
-      if (Object.keys(clonedYellowObj).length !== 0) {
-        including = false;
-      }
-    }
-
-    if (including) {
-      //exclude greys
-      for (let j = 0; j < remainingIndexes.length; j ++) {
-        if (!greysToExclude[remainingIndexes[j]]) {
-
-          if (greysObj[this.wordSpace[i][remainingIndexes[j]]]) {
-            including = false;
-            break;
-          }
-        }
-      }
-    }
-    if (!including) {
-      this.wordSpace[i] = null;
-      including = true;
-    }
-  }
-  this.wordSpace = this.wordSpace.filter((item)=>(item !== null));
+InfoTheoryWorld.prototype.validateGuess = function(guess) {
+  return this.orgiginalWordSpace.some((word)=>(word === guess));
 }
 
 export default InfoTheoryWorld;
-// module.exports.InfoTheoryWorld = InfoTheoryWorld;
