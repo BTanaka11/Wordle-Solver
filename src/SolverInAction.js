@@ -3,7 +3,7 @@ import {infoTheoryDataStructure} from './App.js';
 
 export const SolverInAction = ({addGuessColorsAndSetGuesses, topX}) => {
 
-  const [top5Array, setTop5Array] = React.useState(new Array(topX).fill(null).map(()=>(['',''])));
+  const [top5Array, setTop5Array] = React.useState(new Array(topX).fill().map(()=>['','']));
   const [currentWordIndex, setCurrentWordIndex] = React.useState(0);
 
   let timeEach = Math.min(Math.floor(6000 / infoTheoryDataStructure.wordSpace.length), 500);

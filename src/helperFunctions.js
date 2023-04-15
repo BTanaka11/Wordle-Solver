@@ -6,37 +6,32 @@ fetch(wordList)
 .then(text=> text.split(/\r?\t|\n/))
 .then(res=>words = res)
 
-export const getRandomWord = () => {
-  let randomIndex = Math.floor(Math.random() * words.length);
-  return words[randomIndex];
-}
+export const getColors = (actualWord, guessWord) => {
 
-export const getColors = (word, guess) => {
+  let letterCounts = {};
+  let colors = [];
 
-  let objLetters = {};
-  let result = new Array(word.length);
-
-  for (let i = 0; i < word.length; i ++) {
-    if (guess[i] !== word[i]) {
-      objLetters[word[i]] = 1 + (objLetters[word[i]] | 0);
+  for (let i = 0; i < actualWord.length; i ++) {
+    if (guessWord[i] !== actualWord[i]) {
+      letterCounts[actualWord[i]] = 1 + (letterCounts[actualWord[i]] | 0);
     }
   }
   //g = lightgreen;
   //l = lightgrey
   //y= yellow
-  for (let i = 0; i < guess.length; i ++) {
-    if (guess[i] === word[i]) {
-      result[i] = 'g';
+  for (let i = 0; i < guessWord.length; i ++) {
+    if (guessWord[i] === actualWord[i]) {
+      colors.push('g');
     } else {
-      let tempz = objLetters[guess[i]];
+      let tempz = letterCounts[guessWord[i]];
       if (tempz === undefined || tempz === 0) {
-        result[i] = 'l'
+        colors.push('l');
       } else {
-        objLetters[guess[i]] --;
-        result[i] = 'y';
+        letterCounts[guessWord[i]] --;
+        colors.push('y');
       }
     }
   }
 
-  return result;
+  return colors;
 }

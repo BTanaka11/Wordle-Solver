@@ -1,4 +1,4 @@
-export const RowStat = ({guessStats, bot}) => {
+const RowStat = ({guessStats, bot}) => {
 
   let bitsBefore = Math.log2(guessStats.wordCountBefore).toFixed(2);
   let bitsAfter = Math.log2(guessStats.wordCountAfter).toFixed(2);
@@ -11,3 +11,5 @@ export const RowStat = ({guessStats, bot}) => {
     <td>{(bitsBefore - bitsAfter).toFixed(2)}</td>
   </tr>);
 };
+
+export default RowStat;

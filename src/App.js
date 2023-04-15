@@ -1,8 +1,8 @@
-import './App.css';
-import {Row} from './Row.js';
 import React from 'react';
+import './App.css';
+import Row from './Row.js';
 import wordList from './wordList.txt';
-import {RowStat} from './RowStat.js';
+import RowStat from './RowStat.js';
 import {getColors} from './helperFunctions.js';
 import InfoTheoryWorld from './InfoTheoryWorld.js';
 import {SolverInAction} from './SolverInAction.js';
@@ -150,7 +150,7 @@ function App() {
 
   return (
     <div id ="outerOuter">
-      <div id="leftColumn">
+      <div>
         <div id="buttonContainer">
           <BotSpeedSetting setBotSpeed={setBotSpeed} mode={mode}></BotSpeedSetting>
           <BotAverage count={botGameCount} average={(botScoreSum/botGameCount).toFixed(2)}></BotAverage>

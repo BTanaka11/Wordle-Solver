@@ -1,6 +1,6 @@
 export const BotSpeedSetting = ({setBotSpeed, mode}) => {
   return (
-  <fieldset disabled={mode !== 'gaming'} onChange={(e)=>(setBotSpeed(Number(e.target.value)))}>
+  <fieldset disabled={mode !== 'gaming'} onChange={(e)=>setBotSpeed(Number(e.target.value))}>
     <legend>Bot:</legend>
     <input type="radio" id="off" name="drone" value="0" defaultChecked></input>
     <label htmlFor="off">Off</label>
