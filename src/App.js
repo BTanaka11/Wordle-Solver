@@ -25,7 +25,7 @@ function App() {
   const [humanMove, setHumanMove] = React.useState(false);
   const [displaySolver, setdisplaySolver] = React.useState(false);
 
-  const resetGame = () => {
+  const resetGame = () => (
     fetch(wordList)
     .then(response => response.text())
     .then(text=> text.split(/\r?\t|\n/))
@@ -45,9 +45,9 @@ function App() {
         infoTheoryDataStructure.wordSpace = res;
       }
     })
-  }
+  )
 
-  const addGuessColorsAndSetGuesses = React.useCallback((guess1) => {
+  const addGuessColorsAndSetGuesses = React.useCallback(([guess1, entropy]) => {
     const handleWinLoss = () => {
       if (!humanMove) {
         setBotScoreSum(a=>a+currentRow+1);
@@ -55,7 +55,7 @@ function App() {
         setHumanMove(true);
       }
       if (guesses[currentRow].bot) {
-        setTimeout(resetGame, 2000);
+        setTimeout(resetGame, 1600);
       }
     };
     if (displaySolver) {
@@ -67,13 +67,16 @@ function App() {
     let colors = getColors(word, guess1);
     let stats = {
       wordCountBefore: infoTheoryDataStructure.wordSpace.length,
-      entropy: infoTheoryDataStructure.checkGuess(guess1)
+      entropy: entropy
     };
     infoTheoryDataStructure.trimWordSpace(colors, guess1);
     stats.wordCountAfter = infoTheoryDataStructure.wordSpace.length;
 
-    temp[currentRow] = {guessWord: guess1, guessColors: colors, guessStats: stats, bot:botSpeed > 0 ? true: false};
-    setGuesses(temp);
+    if (temp[currentRow].guessWord === null) {
+      temp[currentRow] = {guessWord: guess1, guessColors: colors, guessStats: stats, bot:botSpeed > 0 ? true: false};
+      setGuesses(temp);
+    }
+
     if (guess1 === word) {
       setMode('won');
       handleWinLoss()
@@ -98,7 +101,7 @@ function App() {
     if (botSpeed === 1) {
       interval1 = setInterval(()=> {
         setdisplaySolver(true);
-      }, 4000);
+      }, 2000);
 
     } else {
       setdisplaySolver(false);
@@ -108,33 +111,31 @@ function App() {
     if (botSpeed === 2) {
       interval2 = setInterval(()=> {
         addGuessColorsAndSetGuesses(infoTheoryDataStructure.getBestGuess())
-      }, 2500);
+      }, 2000);
     } else {
       clearInterval(interval2);
     }
     if (botSpeed === 3) {
+
       interval3 = setInterval(()=> {
         resetGame();
         infoTheoryDataStructure.wordSpace = [...infoTheoryDataStructure.orgiginalWordSpace];
-        let bestGuess = infoTheoryDataStructure.getBestGuess();
-        let indexed = infoTheoryDataStructure.index;
-        let actualWord = infoTheoryDataStructure.wordSpace[indexed];
-        let colorz = getColors(actualWord, bestGuess).join('');
-        let roundCount = 1;
-        let allGreens = 'g'.repeat(lengthz)
-        while (roundCount < 6 && colorz !== allGreens) {
+        let bestGuess = null;
+        let actualWord = infoTheoryDataStructure.wordSpace[infoTheoryDataStructure.index];
+        let roundCount = 0;
+        while (roundCount < 6 && bestGuess !== actualWord) {
+          [bestGuess] = infoTheoryDataStructure.getBestGuess();
+          let colorz = getColors(actualWord, bestGuess).join('');
           infoTheoryDataStructure.trimWordSpace(colorz, bestGuess);
-          bestGuess = infoTheoryDataStructure.getBestGuess();
-          colorz = getColors(actualWord, bestGuess).join('');
           roundCount++;
         }
         setBotScoreSum(a=>a+roundCount);
         setbotGameCount(a=>a+1);
-        if (indexed === infoTheoryDataStructure.originalWordSpaceLength -1) {
+        if (infoTheoryDataStructure.index === infoTheoryDataStructure.originalWordSpaceLength - 1) {
           setBotSpeed(0);
           resetGame();
         } else {
-          infoTheoryDataStructure.index = indexed + 1;
+          infoTheoryDataStructure.index ++;
         };
       }, 10);
     } else {
@@ -165,7 +166,7 @@ function App() {
         <input className="inputPart" type="submit" disabled={guess.length < lengthz} onClick={()=>{
           if (infoTheoryDataStructure.validateGuess(guess)) {
             setHumanMove(true);
-            addGuessColorsAndSetGuesses(guess);
+            addGuessColorsAndSetGuesses([guess, infoTheoryDataStructure.checkGuess(guess)]);
           } else {
             alert('Invalid word!');
           }

@@ -6,6 +6,7 @@ let InfoTheoryWorld = function(words) {
   this.originalWordSpaceLength = words.length;
   this.bestFirstGuess = null;
   this.index = 0;
+
 }
 
 InfoTheoryWorld.prototype.checkGuess = function(guess) {
@@ -27,12 +28,18 @@ InfoTheoryWorld.prototype.checkGuess = function(guess) {
 }
 
 InfoTheoryWorld.prototype.getBestGuess = function() {
+  if (this.wordSpace.length === 1) {
+    return [this.wordSpace[0], 0];
+  }
   if (this.originalWordSpaceLength === this.wordSpace.length && this.bestFirstGuess) {
     return this.bestFirstGuess;
   }
 
   let max = [-Infinity, ''];
-  this.wordSpace.forEach((word)=> {
+
+  let tempCopyWordSpace = this.wordSpace.length > 200 ? this.orgiginalWordSpace : this.wordSpace;
+
+  tempCopyWordSpace.forEach((word)=> {
     let res = this.checkGuess(word);
     if (res > max[0]) {
       max[0] = res;
@@ -40,10 +47,11 @@ InfoTheoryWorld.prototype.getBestGuess = function() {
     }
   })
   if (this.originalWordSpaceLength === this.wordSpace.length) {
-    this.bestFirstGuess = max[1];
+    this.bestFirstGuess = [max[1], max[0]];
   }
-  return max[1];
+  return [max[1], max[0]];
 }
+
 InfoTheoryWorld.prototype.trimWordSpace = function (colors, guess) {
   let yellowsOBJ = {};
   let greysOBJ = {};

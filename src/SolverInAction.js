@@ -27,7 +27,7 @@ export const SolverInAction = ({addGuessColorsAndSetGuesses, topX}) => {
         setCurrentWordIndex(a=>a+1);
         }, timeEach);
     } else {
-      addGuessColorsAndSetGuesses(top5Array[0][0]);
+      addGuessColorsAndSetGuesses([top5Array[0][0], top5Array[0][1]]);
       clearTimeout(timerz);
     }
     return () => clearTimeout(timerz);
