@@ -19,10 +19,9 @@ function App() {
   const [guesses, setGuesses] = React.useState(null);
   const [mode, setMode] = React.useState(null);
   const [guess, setGuess] = React.useState(null);
-  const [botSpeed, setBotSpeed] = React.useState(null);
+  const [botSpeed, setBotSpeed] = React.useState(0);
   const [botScoreSum, setBotScoreSum] = React.useState(0);
   const [botGameCount, setbotGameCount] = React.useState(0);
-  const [humanMove, setHumanMove] = React.useState(false);
   const [displaySolver, setdisplaySolver] = React.useState(false);
 
   const resetGame = () => (
@@ -32,7 +31,6 @@ function App() {
     .then(res=>{
       let randomIndex = Math.floor(Math.random() * res.length);
       setMode('gaming');
-      setHumanMove(false);
       setWord(res[randomIndex]);
       setLengthz(5);
       setCurrentRow(0);
@@ -49,13 +47,12 @@ function App() {
 
   const addGuessColorsAndSetGuesses = React.useCallback(([guess1, entropy]) => {
     const handleWinLoss = () => {
-      if (!humanMove) {
+      if (guesses.every((guess)=>guess.bot)) {
         setBotScoreSum(a=>a+currentRow+1);
         setbotGameCount(a=>a+1);
-        setHumanMove(true);
       }
       if (guesses[currentRow].bot) {
-        setTimeout(resetGame, 1600);
+        setTimeout(resetGame, 1300);
       }
     };
     if (displaySolver) {
@@ -88,7 +85,7 @@ function App() {
       setGuess('');
     }
 
-  }, [botSpeed, currentRow, guesses, word, humanMove, displaySolver])
+  }, [botSpeed, currentRow, guesses, word, displaySolver])
 
   React.useEffect(()=> {
     resetGame();
@@ -161,11 +158,10 @@ function App() {
             <Row key={index} word={word} guess={item}></Row>
           ))}
         </div>
-        {mode === 'gaming' && !botSpeed && <div>
+        {mode === 'gaming' && botSpeed === 0 && <div>
         <input className="inputPart" type="text" maxLength={lengthz} placeholder="enter guess..." onChange={((e)=>{setGuess(e.target.value.toLowerCase())})} value={guess}></input>
         <input className="inputPart" type="submit" disabled={guess.length < lengthz} onClick={()=>{
           if (infoTheoryDataStructure.validateGuess(guess)) {
-            setHumanMove(true);
             addGuessColorsAndSetGuesses([guess, infoTheoryDataStructure.checkGuess(guess)]);
           } else {
             alert('Invalid word!');
@@ -175,7 +171,7 @@ function App() {
         </div>}
 
         {mode!=='gaming' && <div>{mode === 'won' ? `Won in ${currentRow + 1} tries!` : `Lost! The answer was ${word}.`}
-          {!botSpeed && <button onClick={resetGame}>Play Again</button>}
+          {botSpeed === 0 && <button onClick={resetGame}>Play Again</button>}
         </div>}
 
       </div>
